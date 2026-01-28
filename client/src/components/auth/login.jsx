@@ -30,26 +30,14 @@ const handleLogin = (values) => {
 
 export default function LoginPage() {
   return (
-    <div className="auth-bg">
-      <div style={{
-        maxWidth: 420,
-        width: '100%',
-        background: '#fff',
-        padding: 36,
-        borderRadius: 18,
-        boxShadow: '0 8px 32px rgba(44, 62, 80, 0.14)',
-        border: '1px solid #e0e7ff',
-      }}>
-        <AuthForm
-          type="login"
-          fields={loginFields}
-          validate={validateLogin}
-          onSubmit={handleLogin}
-        />
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 18, paddingRight: 4 }}>
-          <AuthNav type="login" />
-        </div>
-      </div>
+    <div style={{ maxWidth: 400, margin: "40px auto", padding: 24, border: "1px solid #eee", borderRadius: 8 }}>
+      <AuthNav type="login" />
+      <AuthForm
+        type="login"
+        fields={loginFields}
+        validate={validateLogin}
+        onSubmit={handleLogin}
+      />
     </div>
   );
 }
