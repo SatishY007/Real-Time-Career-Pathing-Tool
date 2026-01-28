@@ -11,7 +11,7 @@ export default function AuthNav({ type }) {
         </>
       ) : (
         <>
-          <span>Already have an account? </span>
+          <span>Already have an account?</span>
           <Link to="/">Login</Link>
         </>
       )}

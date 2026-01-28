@@ -1,0 +1,173 @@
+/* Custom height for login page only */
+.loginContainer {
+  height: 70dvh !important;
+}
+html, body {
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #f0f4fa;
+  position: relative;
+}
+
+.employee-path-bg {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.employee-path-icon {
+  position: absolute;
+  opacity: 0.13;
+  animation: floatPath 8s linear infinite alternate;
+}
+@keyframes floatPath {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-40px) scale(1.1); }
+}
+/* AuthForm.module.css - Modern, clean, and accessible styles for AuthForm */
+
+.formContainer {
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+  max-width: 420px;
+  width: 90vw;
+  min-width: 260px;
+  height: 88dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 2rem 1.5rem;
+  gap: 10px;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+@media (max-width: 900px) {
+  .formContainer {
+    padding: 1.5rem 0.5rem 1.5rem 0.5rem;
+    height: 100dvh;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 900px) {
+  .formContainer {
+    padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+    min-height: 100dvh;
+    height: 100dvh;
+  }
+}
+
+@media (max-width: 600px) {
+  .formContainer {
+    padding: 1.5rem 0.5rem 1.5rem 0.5rem;
+    min-height: 100dvh;
+    height: 100dvh;
+  }
+}
+
+@media (max-width: 900px) {
+  .formContainer {
+    padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .formContainer {
+    padding: 1.5rem 0.5rem 1.5rem 0.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .formContainer {
+    max-width: 98vw;
+    padding: 7vw 2vw 5vw 2vw;
+    margin: 4vh auto;
+  }
+  .formTitle {
+    font-size: 1.5rem;
+  }
+}
+
+.formTitle {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #3730a3;
+  letter-spacing: 0.5px;
+}
+
+.inputGroup {
+  margin-bottom: 20px;
+}
+
+.label {
+  display: flex;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #22223b;
+  font-size: 1.05rem;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  border: 2px solid #e0e7ef;
+  border-radius: 8px;
+  padding: 4px 10px;
+  background: #f5f7fa;
+  transition: border 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 2px rgba(44,62,80,0.04);
+}
+.inputWrapper:focus-within {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px #a5b4fc44;
+}
+
+.input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 1rem;
+  padding: 6px 0 6px 0;
+  max-width: 340px;
+  min-width: 220px;
+  color: #22223b;
+  font-family: inherit;
+}
+
+.error {
+  color: #e11d48;
+  font-size: 0.97rem;
+  margin-top: 6px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 9px 0;
+  background: linear-gradient(90deg, #6366f1 0%, #3730a3 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-top: 12px;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+  letter-spacing: 0.1px;
+}
+.submitBtn:hover {
+  background: linear-gradient(90deg, #3730a3 60%, #6366f1 100%);
+  box-shadow: 0 4px 16px rgba(99,102,241,0.13);
+}

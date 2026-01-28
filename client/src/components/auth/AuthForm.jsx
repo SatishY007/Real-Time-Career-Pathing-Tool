@@ -1,6 +1,8 @@
 
+
 import React, { useState } from 'react';
 import { EmailIcon, PasswordIcon, UserIcon } from './Icons';
+import styles from './AuthForm.module.css';
 
 const AuthForm = ({ type, onSubmit, fields, validate }) => {
   const [values, setValues] = useState(() => {
@@ -31,12 +33,12 @@ const AuthForm = ({ type, onSubmit, fields, validate }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate>
-      <h2 style={{ textAlign: 'center', marginBottom: 24 }}>{type === 'login' ? 'Login' : 'Sign Up'}</h2>
+    <form onSubmit={handleSubmit} noValidate className={styles.formContainer}>
+      <h2 className={styles.formTitle}>{type === 'login' ? 'Login' : 'Sign Up'}</h2>
       {fields.map(field => (
-        <div key={field.name} style={{ marginBottom: 16 }}>
-          <label htmlFor={field.name} style={{ display: 'block', marginBottom: 4 }}>{field.label}</label>
-          <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #d1d5db', borderRadius: 6, padding: '4px 8px', background: '#f9fafb' }}>
+        <div key={field.name} className={styles.inputGroup}>
+          <label htmlFor={field.name} className={styles.label}>{field.label}</label>
+          <div className={styles.inputWrapper}>
             {getIcon(field.name)}
             <input
               type={field.type}
@@ -45,15 +47,15 @@ const AuthForm = ({ type, onSubmit, fields, validate }) => {
               value={values[field.name]}
               onChange={handleChange}
               autoComplete={field.autoComplete || 'off'}
-              style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontSize: 15 }}
+              className={styles.input}
             />
           </div>
           {errors[field.name] && (
-            <div style={{ color: 'red', fontSize: 12, marginTop: 2 }}>{errors[field.name]}</div>
+            <div className={styles.error}>{errors[field.name]}</div>
           )}
         </div>
       ))}
-      <button type="submit" style={{ width: '100%', padding: '10px 0', background: '#3730a3', color: '#fff', border: 'none', borderRadius: 6, fontWeight: 600, fontSize: 16, marginTop: 8, cursor: 'pointer' }}>
+      <button type="submit" className={styles.submitBtn}>
         {type === 'login' ? 'Login' : 'Sign Up'}
       </button>
     </form>
