@@ -1,0 +1,38 @@
+.skillGapContainer {
+  margin-top: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+.analyzeBtn {
+  background: #3a8dde;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.analyzeBtn:disabled {
+  background: #b0b8c1;
+  cursor: not-allowed;
+}
+.result {
+  background: #f7fafd;
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  color: #2d3a4a;
+  font-size: 1rem;
+}
+.result ul {
+  margin: 0.5rem 0 0 1.2rem;
+  padding: 0;
+}
+.error {
+  color: #ff5a5f;
+  font-weight: 600;
+  font-size: 1rem;
+}

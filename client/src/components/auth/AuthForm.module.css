@@ -171,3 +171,10 @@ html, body {
   background: linear-gradient(90deg, #3730a3 60%, #6366f1 100%);
   box-shadow: 0 4px 16px rgba(99,102,241,0.13);
 }
+
+.submitBtn:focus,
+button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}

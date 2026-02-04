@@ -1,0 +1,47 @@
+.jobList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+.jobItem {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(44, 62, 80, 0.07);
+  margin-bottom: 1rem;
+  padding: 1rem 1.2rem;
+  transition: box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.jobItem:hover {
+  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.13);
+}
+.jobItem a {
+  color: #3a8dde;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+.company {
+  color: #2d3a4a;
+  font-size: 0.98rem;
+  font-weight: 500;
+}
+.location {
+  color: #7a8ca3;
+  font-size: 0.95rem;
+}
+.placeholder {
+  color: #b0b8c1;
+  font-size: 1.1rem;
+  text-align: center;
+  width: 100%;
+  padding: 2rem 0;
+}
+.error {
+  color: #ff5a5f;
+  font-weight: 600;
+  text-align: center;
+  padding: 1rem 0;
+}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./AuthForm.module.css";
+import { apiPost } from '../../api';
 
 export default function Signup() {
   const [values, setValues] = useState({ name: "", email: "", password: "", confirmPassword: "" });
@@ -26,7 +27,19 @@ export default function Signup() {
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
       setLoading(true);
-      setTimeout(() => setLoading(false), 800);
+      try {
+        await apiPost('/api/auth/signup', {
+          name: values.name,
+          email: values.email,
+          password: values.password,
+          skills: [] // You can pass actual skills if available
+        });
+        setLoading(false);
+        navigate('/login');
+      } catch (err) {
+        setLoading(false);
+        setErrors({ api: err.message });
+      }
     }
   };
 
@@ -112,12 +125,13 @@ export default function Signup() {
           {loading ? "Signing up..." : "Sign Up"}
         </button>
       </form>
+      {errors.api && <div className={styles.error}>{errors.api}</div>}
       <div style={{ display: 'block', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginTop: 12 }}>
         <span style={{ color: '#22223b', fontSize: 15 }}>Already have an account?</span>
         <button
           type="button"
           style={{ color: '#6366f1', fontWeight: 600, textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer', fontSize: 15 }}
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/login')}
         >
           Login
         </button>

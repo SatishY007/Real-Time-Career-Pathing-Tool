@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./AuthForm.module.css";
+import { apiPost } from '../../api';
 
 export default function Login() {
   const [values, setValues] = useState({ email: "", password: "" });
@@ -23,8 +24,23 @@ export default function Login() {
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
       setLoading(true);
-      // Simulate API call
-      setTimeout(() => setLoading(false), 800);
+      try {
+        console.log('Attempting login with:', values);
+        const res = await apiPost('/api/auth/login', {
+          email: values.email,
+          password: values.password
+        });
+        console.log('Login API response:', res);
+        if (res.token) {
+          localStorage.setItem('token', res.token);
+        }
+        setLoading(false);
+        navigate('/dashboard');
+      } catch (err) {
+        setLoading(false);
+        setErrors({ api: err.message });
+        console.error('Login API error:', err);
+      }
     }
   };
 
@@ -78,6 +94,7 @@ export default function Login() {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
+      {errors.api && <div className={styles.error}>{errors.api}</div>}
       <div style={{ display: 'block', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginTop: 18 }}>
         <span style={{ color: '#22223b', fontSize: 15 }}>Don't have an account?</span>
         <button

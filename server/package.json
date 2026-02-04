@@ -3,9 +3,21 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "satish yalla",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "axios": "^1.13.4",
+    "bcryptjs": "^3.0.3",
+    "chart.js": "^4.5.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.1.5",
+    "react-chartjs-2": "^5.3.1"
+  }
 }

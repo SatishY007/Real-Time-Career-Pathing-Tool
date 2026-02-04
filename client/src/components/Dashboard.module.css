@@ -1,0 +1,97 @@
+.dashboardContainer {
+  padding: 2.5rem 2vw 2.5rem 2vw;
+  background: linear-gradient(135deg, #181c24 0%, #232837 100%);
+  min-height: 100vh;
+  height: 100vh;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  overflow-y: auto;
+  max-height: 100vh;
+  scrollbar-width: thin;
+  scrollbar-color: #232837 #181c24;
+  color: #e3e6ed;
+  transition: background 0.3s;
+}
+
+/* Custom Scrollbar for Webkit */
+.dashboardContainer::-webkit-scrollbar {
+  width: 10px;
+  background: #181c24;
+  border-radius: 8px;
+}
+.dashboardContainer::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #232837 0%, #353b4b 100%);
+  border-radius: 8px;
+  min-height: 40px;
+}
+
+.title {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #e3e6ed;
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #5a7cff 30%, #e3e6ed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 8px #181c24;
+}
+
+.sections {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  justify-content: stretch;
+  align-items: stretch;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.skillInputSection, .roadmapSection, .jobFeedSection {
+  background: rgba(36, 41, 56, 0.98);
+  border-radius: 1.2rem;
+  box-shadow: 0 6px 32px 0 rgba(20, 24, 36, 0.22), 0 1.5px 6px 0 rgba(44, 62, 80, 0.08);
+  padding: 2.2rem 2rem 2rem 2rem;
+  flex: 1 1 0;
+  min-width: 320px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: 1.5px solid #232837;
+  margin-bottom: 0;
+}
+.skillInputSection:hover, .roadmapSection:hover, .jobFeedSection:hover {
+  box-shadow: 0 16px 48px 0 rgba(36, 41, 56, 0.28), 0 4px 16px 0 rgba(44, 62, 80, 0.14);
+  transform: translateY(-4px) scale(1.015);
+}
+
+.skillInputSection h2, .roadmapSection h2, .jobFeedSection h2 {
+  color: #7faaff;
+  font-size: 1.3rem;
+  margin-bottom: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px #181c24;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+@media (max-width: 1000px) {
+  .sections {
+    flex-direction: column;
+    gap: 1.2rem;
+    align-items: center;
+    width: 100vw;
+  }
+  .skillInputSection, .roadmapSection, .jobFeedSection {
+    max-width: 98vw;
+    min-width: 160px;
+    width: 98vw;
+    padding: 0.7rem 0.2rem;
+    align-items: center;
+  }
+}
