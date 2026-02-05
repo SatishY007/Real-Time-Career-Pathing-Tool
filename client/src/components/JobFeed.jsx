@@ -18,7 +18,7 @@ const JobFeed = ({ role }) => {
         setLoading(false);
       })
       .catch(err => {
-        setError('Failed to fetch jobs');
+        setError(err.message || 'Failed to fetch jobs');
         setLoading(false);
       });
   }, [role]);
@@ -30,7 +30,7 @@ const JobFeed = ({ role }) => {
 
   return (
     <ul className={styles.jobList}>
-      {jobs.slice(0, 8).map(job => (
+      {jobs.map(job => (
         <li key={job.id} className={styles.jobItem}>
           <a href={job.redirect_url} target="_blank" rel="noopener noreferrer">
             <strong>{job.title}</strong>

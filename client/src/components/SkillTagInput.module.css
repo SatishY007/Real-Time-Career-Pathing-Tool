@@ -19,7 +19,7 @@
   flex-wrap: wrap;
   gap: 0.3rem;
   align-items: center;
-  width: auto;
+  width: 100%;
   flex-direction: row;
 }
 
@@ -56,16 +56,16 @@
   background: transparent;
   outline: none;
   font-size: 0.9rem;
-  min-width: 80px;
-  max-width: 140px;
+  min-width: 180px;
+  max-width: none;
   margin-left: 0.2rem;
   padding: 0.08rem 0;
   color: #e3e6ed;
   caret-color: #7faaff;
-  flex: 0 1 120px;
+  flex: 1 1 260px;
+  width: 100%;
   display: inline-block;
   vertical-align: middle;
-  white-space: nowrap;
   height: 18px;
   transition: color 0.2s, background 0.2s;
 }

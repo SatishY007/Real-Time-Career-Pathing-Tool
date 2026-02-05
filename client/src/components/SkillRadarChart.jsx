@@ -48,11 +48,13 @@ const SkillRadarChart = ({ userSkills = [], targetSkills = [], labels = [] }) =>
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top',
         labels: {
-          font: { size: 14 }
+          color: '#e3e6ed',
+          font: { size: 12, weight: '600' }
         }
       },
       tooltip: {
@@ -61,17 +63,24 @@ const SkillRadarChart = ({ userSkills = [], targetSkills = [], labels = [] }) =>
     },
     scales: {
       r: {
-        angleLines: { display: true },
+        angleLines: { display: true, color: 'rgba(227, 230, 237, 0.12)' },
+        grid: { color: 'rgba(227, 230, 237, 0.10)' },
         suggestedMin: 0,
         suggestedMax: 10,
+        ticks: {
+          color: '#b0b8c1',
+          backdropColor: 'transparent',
+          showLabelBackdrop: false
+        },
         pointLabels: {
-          font: { size: 14 }
+          color: '#e3e6ed',
+          font: { size: 12, weight: '600' }
         }
       }
     }
   };
 
-  return <Radar data={data} options={options} />;
+  return <Radar data={data} options={options} style={{ width: '100%', height: '100%' }} />;
 };
 
 export default SkillRadarChart;

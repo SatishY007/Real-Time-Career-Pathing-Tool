@@ -6,7 +6,6 @@ html, body {
   height: 100dvh;
   margin: 0;
   padding: 0;
-  overflow: hidden;
   background: #f0f4fa;
   position: relative;
 }
@@ -16,7 +15,6 @@ html, body {
   top: 0; left: 0; width: 100vw; height: 100vh;
   pointer-events: none;
   z-index: 0;
-  overflow: hidden;
 }
 .employee-path-icon {
   position: absolute;

@@ -12,7 +12,7 @@ const SkillGap = ({ skills, targetRole }) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await apiPost('/api/skill-gap/analyze', { targetRole });
+      const data = await apiPost('/api/skill-gap/analyze', { targetRole, skills });
       setMissingSkills(data.missingSkills || []);
     } catch (err) {
       setError(err.message);

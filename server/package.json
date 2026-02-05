@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "satish yalla",
@@ -19,5 +20,8 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.1.5",
     "react-chartjs-2": "^5.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
   }
 }

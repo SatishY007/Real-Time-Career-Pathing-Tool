@@ -25,23 +25,25 @@ const SkillTagInput = ({ skills, setSkills }) => {
   };
 
   return (
-    <div className={styles.tagInputContainer}>
-      <div className={styles.tags}>
-        {skills.map((skill, idx) => (
-          <span key={skill} className={styles.tag}>
-            {skill}
-            <button type="button" className={styles.removeBtn} onClick={() => removeSkill(idx)}>
-              ×
-            </button>
-          </span>
-        ))}
-        <input
-          className={styles.input}
-          value={input}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          placeholder="Type a skill and press Enter"
-        />
+    <div>
+      <div className={styles.tagInputContainer}>
+        <div className={styles.tags}>
+          {skills.map((skill, idx) => (
+            <span key={skill} className={styles.tag}>
+              {skill}
+              <button type="button" className={styles.removeBtn} onClick={() => removeSkill(idx)}>
+                ×
+              </button>
+            </span>
+          ))}
+          <input
+            className={styles.input}
+            value={input}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            placeholder="Type a skill and press Enter"
+          />
+        </div>
       </div>
     </div>
   );

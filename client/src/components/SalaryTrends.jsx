@@ -18,7 +18,7 @@ const SalaryTrends = ({ techStack }) => {
         setLoading(false);
       })
       .catch(err => {
-        setError('Failed to fetch salary trends');
+        setError(err.message || 'Failed to fetch salary trends');
         setLoading(false);
       });
   }, [techStack]);

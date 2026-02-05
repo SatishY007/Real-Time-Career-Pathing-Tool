@@ -12,6 +12,8 @@ const Dashboard = () => {
   const [skills, setSkills] = useState([]);
   const navigate = useNavigate();
 
+  const skillQuery = skills.length ? skills.join(' ') : '';
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -25,28 +27,39 @@ const Dashboard = () => {
 
   return (
     <div className={styles.dashboardContainer}>
-      <h1 className={styles.title}>Skill-Graph Career Pathing Dashboard</h1>
+      <header className={styles.header}>
+        <div className={styles.headerInner}>
+          <h1 className={styles.title}>Skill-Graph Career Pathing Dashboard</h1>
+        </div>
+      </header>
+
       <div className={styles.sections}>
         <section className={styles.skillInputSection}>
           <h2>Skill Input</h2>
           <SkillTagInput skills={skills} setSkills={setSkills} />
-          <SkillGap skills={skills} targetRole={skills[0] || ''} />
+          <SkillGap skills={skills} targetRole={skillQuery} />
         </section>
         <section className={styles.roadmapSection}>
           <h2>Career Roadmap Visualizer</h2>
-          <div style={{width: '100%', minHeight: 320, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f7fa', borderRadius: 12, border: '1px solid #e0e6ed', color: '#3a4d63', fontSize: 18, padding: 16, flexDirection: 'column'}}>
-            <SkillRadarChart
-              labels={skills.length ? skills : ['Skill A', 'Skill B', 'Skill C', 'Skill D', 'Skill E']}
-              userSkills={skills.length ? skills.map(() => Math.floor(Math.random() * 8) + 2) : [6, 7, 5, 8, 4]}
-              targetSkills={skills.length ? skills.map(() => 10) : [10, 10, 10, 10, 10]}
-            />
-            <SalaryTrends techStack={skills[0] || ''} />
+          <div className={`${styles.surfaceCard} ${styles.surfaceCardCentered}`}>
+            <div className={styles.roadmapBody}>
+              <div className={styles.chartWrap}>
+                <SkillRadarChart
+                  labels={skills.length ? skills : ['Skill A', 'Skill B', 'Skill C', 'Skill D', 'Skill E']}
+                  userSkills={skills.length ? skills.map(() => Math.floor(Math.random() * 8) + 2) : [6, 7, 5, 8, 4]}
+                  targetSkills={skills.length ? skills.map(() => 10) : [10, 10, 10, 10, 10]}
+                />
+              </div>
+              <div className={styles.salaryWrap}>
+                <SalaryTrends techStack={skillQuery} />
+              </div>
+            </div>
           </div>
         </section>
         <section className={styles.jobFeedSection}>
           <h2>Live Job Feed</h2>
-          <div style={{width: '100%', minHeight: 180, background: '#f5f7fa', borderRadius: 12, border: '1px solid #e0e6ed', padding: 12}}>
-            <JobFeed role={skills[0] || ''} />
+          <div className={styles.surfaceCard}>
+            <JobFeed role={skillQuery} />
           </div>
         </section>
       </div>
