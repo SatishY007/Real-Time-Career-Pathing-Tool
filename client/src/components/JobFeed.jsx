@@ -8,6 +8,10 @@ const JobFeed = ({ role }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const dismissJob = (jobId) => {
+    setJobs(prev => prev.filter(j => j.id !== jobId));
+  };
+
   useEffect(() => {
     if (!role) return;
     setLoading(true);
@@ -32,6 +36,19 @@ const JobFeed = ({ role }) => {
     <ul className={styles.jobList}>
       {jobs.map(job => (
         <li key={job.id} className={styles.jobItem}>
+          <button
+            type="button"
+            className={styles.dismissBtn}
+            aria-label="Dismiss job"
+            title="Not interested"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              dismissJob(job.id);
+            }}
+          >
+            ×
+          </button>
           <a href={job.redirect_url} target="_blank" rel="noopener noreferrer">
             <strong>{job.title}</strong>
           </a>

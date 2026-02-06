@@ -8,8 +8,11 @@ const connectDB = async () => {
     console.log('MongoDB connected');
   } catch (err) {
     console.error('MongoDB connection error:', err.message);
-    process.exit(1);
+    // Do not crash the entire server in dev; allow it to start and
+    // return a clear error from routes that require the database.
+    return false;
   }
+  return true;
 };
 
 module.exports = connectDB;

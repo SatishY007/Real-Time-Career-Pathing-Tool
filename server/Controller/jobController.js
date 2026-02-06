@@ -16,6 +16,22 @@ async function searchJobs({ app_id, app_key, what }) {
   return data?.results || [];
 }
 
+async function searchRemotive({ what }) {
+  const url = `https://remotive.com/api/remote-jobs?search=${encodeURIComponent(what)}&limit=20`;
+  const { data } = await axios.get(url, {
+    timeout: 15000,
+    headers: { Accept: 'application/json' },
+  });
+  const jobs = data?.jobs || [];
+  return jobs.map((j) => ({
+    id: j?.id,
+    title: j?.title,
+    redirect_url: j?.url,
+    company: { display_name: j?.company_name || 'Unknown' },
+    location: { display_name: j?.candidate_required_location || 'Remote' },
+  })).filter((j) => j.id && j.title && j.redirect_url);
+}
+
 function dedupeById(items) {
   const seen = new Set();
   const out = [];
@@ -37,7 +53,10 @@ exports.getLiveJobs = async (req, res) => {
     const app_id = (process.env.ADZUNA_APP_ID || '').trim();
     const app_key = (process.env.ADZUNA_APP_KEY || '').trim();
     if (!app_id || !app_key) {
-      return res.status(500).json({ msg: 'Missing Adzuna credentials in server environment' });
+      // Fallback provider that does not require API keys.
+      // Keeps the UI functional in dev/demo environments.
+      const fallback = await searchRemotive({ what: role });
+      return res.json(fallback.slice(0, 20));
     }
 
     const terms = extractTerms(role);

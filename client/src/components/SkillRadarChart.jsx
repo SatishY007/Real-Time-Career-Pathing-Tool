@@ -53,7 +53,7 @@ const SkillRadarChart = ({ userSkills = [], targetSkills = [], labels = [] }) =>
       legend: {
         position: 'top',
         labels: {
-          color: '#e3e6ed',
+          color: '#0f172a',
           font: { size: 12, weight: '600' }
         }
       },
@@ -63,17 +63,17 @@ const SkillRadarChart = ({ userSkills = [], targetSkills = [], labels = [] }) =>
     },
     scales: {
       r: {
-        angleLines: { display: true, color: 'rgba(227, 230, 237, 0.12)' },
-        grid: { color: 'rgba(227, 230, 237, 0.10)' },
+        angleLines: { display: true, color: 'rgba(15, 23, 42, 0.10)' },
+        grid: { color: 'rgba(15, 23, 42, 0.08)' },
         suggestedMin: 0,
         suggestedMax: 10,
         ticks: {
-          color: '#b0b8c1',
+          color: '#64748b',
           backdropColor: 'transparent',
           showLabelBackdrop: false
         },
         pointLabels: {
-          color: '#e3e6ed',
+          color: '#0f172a',
           font: { size: 12, weight: '600' }
         }
       }

@@ -1,8 +1,36 @@
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const User = require('../Model/User');
+
+async function ensureDbConnected(res) {
+  // 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
+  const state = mongoose.connection?.readyState;
+  if (state === 1) return true;
+
+  // If we're in the middle of connecting, wait briefly to avoid false negatives
+  if (state === 2 && typeof mongoose.connection?.asPromise === 'function') {
+    try {
+      await Promise.race([
+        mongoose.connection.asPromise(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 2500)),
+      ]);
+    } catch {
+      // ignore timeout; we'll re-check readyState below
+    }
+    if (mongoose.connection?.readyState === 1) return true;
+    return res.status(503).json({
+      msg: 'Database is still connecting. Please try again in a few seconds.'
+    });
+  }
+
+  return res.status(503).json({
+    msg: 'Database not connected. Check your MongoDB Atlas IP whitelist / network access and MONGO_URI, then restart the server.'
+  });
+}
 
 exports.signup = async (req, res) => {
   try {
+    if (!(await ensureDbConnected(res))) return;
     console.log('--- Signup endpoint hit ---');
     console.log('Signup request body:', req.body);
     const { name, email, password, skills } = req.body;
@@ -33,6 +61,7 @@ exports.signup = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
+    if (!(await ensureDbConnected(res))) return;
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {

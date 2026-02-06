@@ -14,6 +14,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
+  position: relative;
 }
 .jobItem:hover {
   box-shadow: 0 4px 16px rgba(44, 62, 80, 0.13);
@@ -22,6 +23,30 @@
   color: #3a8dde;
   text-decoration: none;
   font-size: 1.1rem;
+}
+
+.dismissBtn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid #0f172a;
+  background: #0f172a;
+  color: #fff;
+  font-size: 18px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.dismissBtn:hover {
+  background: #232837;
+  border-color: #232837;
+  box-shadow: 0 1px 6px rgba(44, 62, 80, 0.10);
 }
 .company {
   color: #2d3a4a;

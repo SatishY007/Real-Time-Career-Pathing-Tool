@@ -1,7 +1,9 @@
 // Centralized API utility using fetch for all backend calls
-// Update baseURL if your backend runs on a different port or domain
+// In dev, prefer same-origin '/api' so Vite proxy works reliably.
+// In prod, set VITE_API_BASE_URL if the backend is on a different origin.
 
-const baseURL = (import.meta?.env?.VITE_API_BASE_URL || 'http://127.0.0.1:5000');
+const envBaseURL = import.meta?.env?.VITE_API_BASE_URL;
+const baseURL = envBaseURL ?? (import.meta?.env?.DEV ? '' : 'http://localhost:5000');
 
 function getAuthHeaders() {
   const token = localStorage.getItem('token');
@@ -10,11 +12,20 @@ function getAuthHeaders() {
 
 
 export async function apiGet(path) {
-  const res = await fetch(baseURL + path, {
-    headers: {
-      ...getAuthHeaders(),
-    },
-  });
+  let res;
+  try {
+    res = await fetch(baseURL + path, {
+      headers: {
+        ...getAuthHeaders(),
+      },
+    });
+  } catch (err) {
+    throw new Error(
+      `Cannot reach backend API. ` +
+        `Start the server (root: npm run dev, or server: npm run dev:server) ` +
+        `or set VITE_API_BASE_URL. (${err?.message || 'network error'})`
+    );
+  }
   if (!res.ok) {
     if (res.status === 401) {
       localStorage.removeItem('token');
@@ -28,7 +39,8 @@ export async function apiGet(path) {
       const json = JSON.parse(text);
       throw new Error(json.msg || json.error || json.message || text);
     } catch {
-      throw new Error(text);
+      const extractedMsg = /"msg"\s*:\s*"([^"]+)"/.exec(text)?.[1];
+      throw new Error(extractedMsg || text);
     }
   }
   return res.json();
@@ -36,14 +48,23 @@ export async function apiGet(path) {
 
 
 export async function apiPost(path, data) {
-  const res = await fetch(baseURL + path, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...getAuthHeaders(),
-    },
-    body: JSON.stringify(data),
-  });
+  let res;
+  try {
+    res = await fetch(baseURL + path, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders(),
+      },
+      body: JSON.stringify(data),
+    });
+  } catch (err) {
+    throw new Error(
+      `Cannot reach backend API. ` +
+        `Start the server (root: npm run dev, or server: npm run dev:server) ` +
+        `or set VITE_API_BASE_URL. (${err?.message || 'network error'})`
+    );
+  }
   if (!res.ok) {
     if (res.status === 401) {
       localStorage.removeItem('token');
@@ -57,7 +78,8 @@ export async function apiPost(path, data) {
       const json = JSON.parse(text);
       throw new Error(json.msg || json.error || json.message || text);
     } catch {
-      throw new Error(text);
+      const extractedMsg = /"msg"\s*:\s*"([^"]+)"/.exec(text)?.[1];
+      throw new Error(extractedMsg || text);
     }
   }
   return res.json();

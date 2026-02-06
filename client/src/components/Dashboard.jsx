@@ -25,11 +25,19 @@ const Dashboard = () => {
     }
   }, [navigate]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login', { replace: true });
+  };
+
   return (
     <div className={styles.dashboardContainer}>
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <h1 className={styles.title}>Skill-Graph Career Pathing Dashboard</h1>
+          <button type="button" className={styles.logoutBtn} onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       </header>
 

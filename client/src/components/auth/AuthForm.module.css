@@ -1,29 +1,31 @@
 /* Custom height for login page only */
 .loginContainer {
-  height: 70dvh !important;
-}
-html, body {
-  height: 100dvh;
-  margin: 0;
-  padding: 0;
-  background: #f0f4fa;
-  position: relative;
+  height: auto !important;
 }
 
-.employee-path-bg {
+.authPage {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  box-sizing: border-box;
+  background: #eaf2fb;
+  position: relative;
+  overflow: hidden;
+}
+
+.employeePathBg {
   position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
+  inset: 0;
   pointer-events: none;
   z-index: 0;
+  background: linear-gradient(135deg, #dbe9f6 0%, #eef6ff 45%, #d7e6f5 100%);
 }
-.employee-path-icon {
-  position: absolute;
-  opacity: 0.13;
-  animation: floatPath 8s linear infinite alternate;
-}
-@keyframes floatPath {
-  0% { transform: translateY(0) scale(1); }
-  100% { transform: translateY(-40px) scale(1.1); }
+
+.employeePathIcon {
+  display: none;
 }
 /* AuthForm.module.css - Modern, clean, and accessible styles for AuthForm */
 
@@ -34,22 +36,22 @@ html, body {
   max-width: 420px;
   width: 90vw;
   min-width: 260px;
-  height: 88dvh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   margin: 0 auto;
   padding: 2rem 1.5rem 2rem 1.5rem;
   gap: 10px;
   box-sizing: border-box;
   overflow: visible;
+  position: relative;
+  z-index: 1;
 }
 
 @media (max-width: 900px) {
   .formContainer {
     padding: 1.5rem 0.5rem 1.5rem 0.5rem;
-    height: 100dvh;
     gap: 16px;
   }
 }
@@ -58,7 +60,6 @@ html, body {
   .formContainer {
     padding: 2.5rem 1.5rem 1.5rem 1.5rem;
     min-height: 100dvh;
-    height: 100dvh;
   }
 }
 
@@ -66,7 +67,6 @@ html, body {
   .formContainer {
     padding: 1.5rem 0.5rem 1.5rem 0.5rem;
     min-height: 100dvh;
-    height: 100dvh;
   }
 }
 
@@ -150,6 +150,14 @@ html, body {
   letter-spacing: 0.1px;
 }
 
+.success {
+  color: #3730a3;
+  font-size: 0.97rem;
+  margin-top: 6px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+
 .submitBtn {
   width: 100%;
   padding: 9px 0;
@@ -175,4 +183,32 @@ button:focus {
   outline: none !important;
   box-shadow: none !important;
   border: none !important;
+}
+
+.footerRow {
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.footerText {
+  color: #22223b;
+  font-size: 15px;
+}
+
+.footerLinkBtn {
+  color: #6366f1;
+  font-weight: 700;
+  font-size: 15px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.footerLinkBtn:hover {
+  text-decoration: underline;
 }
