@@ -3,6 +3,14 @@ import { useNavigate } from "react-router-dom";
 import styles from "./AuthForm.module.css";
 import { apiPost } from '../../api';
 
+/**
+ * Login (Client)
+ * --------------
+ * Collects credentials, performs basic client-side validation, and calls the backend
+ * `POST /api/auth/login`. On success, stores the JWT token in localStorage and
+ * navigates to the dashboard.
+ */
+
 export default function Login() {
   const [values, setValues] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
@@ -10,33 +18,67 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const validate = () => {
+  const isValidEmail = (email) => {
+    const v = String(email || '').trim();
+    if (!v) return false;
+    // Practical email validation (not overly strict): good enough for UI feedback.
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  };
+
+  const normalize = (raw) => {
+    // Trim email (common copy/paste issue). Do not auto-trim password.
+    const email = String(raw?.email || '').trim();
+    const password = String(raw?.password || '');
+    return { email, password };
+  };
+
+  const validateAll = (raw) => {
+    // Returns both normalized values and a field->message map for UI rendering.
+    const v = normalize(raw);
     const errs = {};
-    if (!values.email) errs.email = "Email required";
-    if (!values.password) errs.password = "Password required";
-    return errs;
+    if (!v.email) errs.email = 'Email is required';
+    else if (!isValidEmail(v.email)) errs.email = 'Enter a valid email address';
+
+    if (!v.password) errs.password = 'Password is required';
+    else if (v.password.length < 6) errs.password = 'Password must be at least 6 characters';
+    else if (/^\s|\s$/.test(v.password)) errs.password = 'Password cannot start or end with spaces';
+
+    return { errs, normalized: v };
   };
 
   const handleChange = e => {
+    // Clear global status and field errors while user edits.
     if (status.message) setStatus({ type: '', message: '' });
-    setValues({ ...values, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
+    if (errors?.[name]) {
+      setErrors((prev) => {
+        const next = { ...(prev || {}) };
+        delete next[name];
+        return next;
+      });
+    }
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
     setStatus({ type: '', message: '' });
-    const validationErrors = validate();
-    setErrors(validationErrors);
-    if (Object.keys(validationErrors).length === 0) {
+
+    // Validate before calling API.
+    const { errs, normalized } = validateAll(values);
+    setErrors(errs);
+    if (Object.keys(errs).length === 0) {
       setLoading(true);
       try {
-        console.log('Attempting login with:', values);
+        // Avoid logging raw passwords.
+        console.log('Attempting login with:', { email: normalized.email, password: '***' });
         const res = await apiPost('/api/auth/login', {
-          email: values.email,
-          password: values.password
+          email: normalized.email,
+          password: normalized.password
         });
         console.log('Login API response:', res);
         if (res.token) {
+          // Token is later attached to requests in `client/src/api.js`.
           localStorage.setItem('token', res.token);
         }
         setLoading(false);

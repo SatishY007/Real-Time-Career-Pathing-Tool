@@ -2,6 +2,22 @@ const axios = require('axios');
 const SkillGap = require('../Model/SkillGap');
 const User = require('../Model/User');
 
+/**
+ * Skill Gap Controller
+ * --------------------
+ * Computes the difference between:
+ * - A user’s current skills (from request + stored user profile)
+ * - Skills commonly appearing in job postings for the target role
+ *
+ * Data sources:
+ * - Primary: Adzuna job search API (requires ADZUNA_APP_ID + ADZUNA_APP_KEY)
+ * - Fallback: local ROLE_SKILL_MAP / DEFAULT_SKILL_KEYWORDS if API fails
+ *
+ * Persistence:
+ * - Updates the user’s stored skills (merge)
+ * - Stores each skill-gap analysis in MongoDB (SkillGap collection)
+ */
+
 const DEFAULT_SKILL_KEYWORDS = [
   'javascript', 'typescript', 'react', 'node', 'node.js', 'express', 'next.js',
   'html', 'css', 'tailwind',
@@ -24,16 +40,27 @@ const ROLE_SKILL_MAP = {
   'devops engineer': ['docker', 'kubernetes', 'aws', 'linux', 'git']
 };
 
+/**
+ * Normalizes skills for consistent comparisons.
+ * Example: " React " -> "react"
+ */
 function normalizeSkill(skill) {
   return String(skill || '')
     .trim()
     .toLowerCase();
 }
 
+/**
+ * Removes falsy values and duplicates while preserving order.
+ */
 function uniq(list) {
   return [...new Set(list.filter(Boolean))];
 }
 
+/**
+ * Converts an incoming skills array into a clean unique token list.
+ * Accepts comma/space separated entries (e.g. "react, node").
+ */
 function cleanSkillList(skills) {
   const parts = [];
   for (const item of (Array.isArray(skills) ? skills : [])) {
@@ -47,6 +74,10 @@ function cleanSkillList(skills) {
   return uniq(parts);
 }
 
+/**
+ * Extracts likely skill keywords from job posting text fields.
+ * This is a heuristic matcher used to estimate "required skills" from listings.
+ */
 function extractSkillsFromJobs(jobs, skillKeywords) {
   const keywords = uniq((skillKeywords && skillKeywords.length ? skillKeywords : DEFAULT_SKILL_KEYWORDS).map(normalizeSkill));
   const found = new Set();
@@ -66,6 +97,11 @@ function extractSkillsFromJobs(jobs, skillKeywords) {
   return [...found];
 }
 
+/**
+ * POST /api/skill-gap/analyze (protected)
+ * Body: { targetRole: string, skills: string[] }
+ * Returns: { targetRole, inputSkills, missingSkills, source, warning? }
+ */
 exports.analyzeSkillGap = async (req, res) => {
   try {
     const { targetRole, skills } = req.body;
@@ -77,8 +113,10 @@ exports.analyzeSkillGap = async (req, res) => {
       return res.status(500).json({ msg: 'Missing Adzuna credentials in server environment' });
     }
 
+    // Skills typed on the dashboard (skill tags).
     const inputSkills = cleanSkillList(skills);
 
+    // Merge stored skills (from DB) with newly entered skills.
     const user = await User.findById(req.user.id);
     const mergedStoredSkills = cleanSkillList([
       ...(Array.isArray(user?.skills) ? user.skills : []),
@@ -90,11 +128,13 @@ exports.analyzeSkillGap = async (req, res) => {
       await user.save();
     }
 
+    // Final normalized list for comparison.
     const userSkills = uniq([
       ...inputSkills,
       ...mergedStoredSkills
     ].map(normalizeSkill));
 
+    // Try to fetch real job listings for the target role.
     let adzunaResults = [];
     let adzunaWarning = null;
     try {
@@ -107,6 +147,7 @@ exports.analyzeSkillGap = async (req, res) => {
       });
       adzunaResults = jobs?.results || [];
     } catch (e) {
+      // Adzuna failure should not break the UI; we fall back to local heuristics.
       const status = e?.response?.status;
       const detail = e?.response?.data?.error || e?.response?.data || e?.message;
       console.warn('[skillGapController] Adzuna search failed', status, e?.message);
@@ -121,9 +162,11 @@ exports.analyzeSkillGap = async (req, res) => {
     const roleKey = normalizeSkill(targetRole);
     const fallbackRequired = (ROLE_SKILL_MAP[roleKey] || DEFAULT_SKILL_KEYWORDS).map(normalizeSkill);
 
+    // Combine skill extraction from job listings with our fallback role model.
     const jobExtractedSkills = extractSkillsFromJobs(adzunaResults, DEFAULT_SKILL_KEYWORDS);
     const requiredSkills = uniq([...(jobExtractedSkills || []), ...fallbackRequired].map(normalizeSkill));
 
+    // Missing = required - user.
     const missingSkills = requiredSkills.filter((s) => !userSkills.includes(s));
 
     if (user?._id) {
@@ -139,6 +182,7 @@ exports.analyzeSkillGap = async (req, res) => {
       warning: adzunaWarning
     });
   } catch (err) {
+    // Last-resort safety net: return fallback results so the UI still works.
     const { targetRole, skills } = req.body || {};
     const roleKey = normalizeSkill(targetRole);
     const fallbackRequired = (ROLE_SKILL_MAP[roleKey] || DEFAULT_SKILL_KEYWORDS).map(normalizeSkill);

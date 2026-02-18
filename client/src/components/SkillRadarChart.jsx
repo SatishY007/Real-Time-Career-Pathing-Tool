@@ -10,6 +10,13 @@ import {
   Legend
 } from 'chart.js';
 
+/**
+ * SkillRadarChart (Client)
+ * ------------------------
+ * Visualization-only component.
+ * It renders a Radar chart comparing `userSkills` vs `targetSkills` using Chart.js.
+ */
+
 ChartJS.register(
   RadialLinearScale,
   PointElement,
@@ -20,6 +27,7 @@ ChartJS.register(
 );
 
 const SkillRadarChart = ({ userSkills = [], targetSkills = [], labels = [] }) => {
+  // Chart.js data model.
   const data = {
     labels: labels,
     datasets: [

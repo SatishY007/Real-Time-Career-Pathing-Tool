@@ -1,7 +1,13 @@
-
 import React, { useEffect, useState } from 'react';
 import styles from './JobFeed.module.css';
 import { apiGet } from '../api';
+
+/**
+ * JobFeed (Client)
+ * ----------------
+ * Fetches live job listings from `GET /api/jobs/live?role=...` whenever the
+ * `role` prop changes (typically built from the skill tags on the dashboard).
+ */
 
 const JobFeed = ({ role }) => {
   const [jobs, setJobs] = useState([]);
@@ -9,10 +15,12 @@ const JobFeed = ({ role }) => {
   const [error, setError] = useState(null);
 
   const dismissJob = (jobId) => {
+    // Local-only dismissal (doesn't persist). Keeps demo UX snappy.
     setJobs(prev => prev.filter(j => j.id !== jobId));
   };
 
   useEffect(() => {
+    // Avoid fetching when there's no role/query.
     if (!role) return;
     setLoading(true);
     setError(null);
@@ -42,6 +50,7 @@ const JobFeed = ({ role }) => {
             aria-label="Dismiss job"
             title="Not interested"
             onClick={(e) => {
+              // Prevent the click from opening the job link.
               e.preventDefault();
               e.stopPropagation();
               dismissJob(job.id);
