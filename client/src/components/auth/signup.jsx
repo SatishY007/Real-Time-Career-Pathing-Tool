@@ -3,6 +3,13 @@ import { useNavigate } from "react-router-dom";
 import styles from "./AuthForm.module.css";
 import { apiPost } from '../../api';
 
+/**
+ * Signup / Register (Client)
+ * --------------------------
+ * Collects user details, performs basic client-side validation, and calls
+ * `POST /api/auth/signup`. On success, redirects user to the login page.
+ */
+
 export default function Signup() {
   const [values, setValues] = useState({ name: "", email: "", password: "", confirmPassword: "" });
   const [errors, setErrors] = useState({});
@@ -10,34 +17,75 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const validate = () => {
+  const isValidEmail = (email) => {
+    const v = String(email || '').trim();
+    if (!v) return false;
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  };
+
+  const normalize = (raw) => {
+    // Trim name/email. Do not auto-trim password.
+    const name = String(raw?.name || '').trim();
+    const email = String(raw?.email || '').trim();
+    const password = String(raw?.password || '');
+    const confirmPassword = String(raw?.confirmPassword || '');
+    return { name, email, password, confirmPassword };
+  };
+
+  const validateAll = (raw) => {
+    // Returns both normalized values and a field->message map for UI rendering.
+    const v = normalize(raw);
     const errs = {};
-    if (!values.name) errs.name = "Name required";
-    if (!values.email) errs.email = "Email required";
-    if (!values.password) errs.password = "Password required";
-    if (!values.confirmPassword) errs.confirmPassword = "Confirm password";
-    if (values.password && values.confirmPassword && values.password !== values.confirmPassword) errs.confirmPassword = "Passwords do not match";
-    return errs;
+
+    if (!v.name) errs.name = 'Name is required';
+    else if (v.name.length < 2) errs.name = 'Name must be at least 2 characters';
+    else if (v.name.length > 50) errs.name = 'Name must be 50 characters or less';
+
+    if (!v.email) errs.email = 'Email is required';
+    else if (!isValidEmail(v.email)) errs.email = 'Enter a valid email address';
+
+    if (!v.password) errs.password = 'Password is required';
+    else if (v.password.length < 8) errs.password = 'Password must be at least 8 characters';
+    else if (/^\s|\s$/.test(v.password)) errs.password = 'Password cannot start or end with spaces';
+
+    if (!v.confirmPassword) errs.confirmPassword = 'Confirm password is required';
+    else if (v.password && v.confirmPassword && v.password !== v.confirmPassword) {
+      errs.confirmPassword = 'Passwords do not match';
+    }
+
+    return { errs, normalized: v };
   };
 
   const handleChange = e => {
+    // Clear global status and field errors while user edits.
     if (status.message) setStatus({ type: '', message: '' });
-    setValues({ ...values, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
+    if (errors?.[name]) {
+      setErrors((prev) => {
+        const next = { ...(prev || {}) };
+        delete next[name];
+        return next;
+      });
+    }
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
     setStatus({ type: '', message: '' });
-    const validationErrors = validate();
-    setErrors(validationErrors);
-    if (Object.keys(validationErrors).length === 0) {
+
+    // Validate before calling API.
+    const { errs, normalized } = validateAll(values);
+    setErrors(errs);
+    if (Object.keys(errs).length === 0) {
       setLoading(true);
       try {
         await apiPost('/api/auth/signup', {
-          name: values.name,
-          email: values.email,
-          password: values.password,
-          skills: [] // You can pass actual skills if available
+          name: normalized.name,
+          email: normalized.email,
+          password: normalized.password,
+          // Skills are captured later on the dashboard.
+          skills: []
         });
         setLoading(false);
         setStatus({ type: 'success', message: 'Sign up successful' });

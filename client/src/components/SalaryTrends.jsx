@@ -1,7 +1,13 @@
-
 import React, { useEffect, useState } from 'react';
 import styles from './SalaryTrends.module.css';
 import { apiGet } from '../api';
+
+/**
+ * SalaryTrends (Client)
+ * ---------------------
+ * Fetches salary trend info for a given `techStack` query.
+ * Backend endpoint: `GET /api/salary/trends?techStack=...`
+ */
 
 const SalaryTrends = ({ techStack }) => {
   const [salary, setSalary] = useState(null);
@@ -9,6 +15,7 @@ const SalaryTrends = ({ techStack }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Avoid fetching when query is empty.
     if (!techStack) return;
     setLoading(true);
     setError(null);
